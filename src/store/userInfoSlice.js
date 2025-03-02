@@ -1,8 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    userName: "",
-    isLoggedIn: false,
+    userData: "",
 }
 
 const userInfoSlice = createSlice(
@@ -10,15 +9,15 @@ const userInfoSlice = createSlice(
         name: "userInfo",
         initialState,
         reducers: {
-            updateUserName: (state, action) => {
-                state.userName = action.payload;
+            loadUserData: (state, action) => {
+                state.userData = action.payload;
             },
-            setLogInTrue: (state, action) => {
-                state.isLoggedIn = action.payload;
+            offLoadUserData: (state) => {
+                state.userData = "";
             }
         }
     }
 )
 
-export const { updateUserName ,setLogInTrue } = userInfoSlice.actions;
+export const { offLoadUserData ,loadUserData } = userInfoSlice.actions;
 export default userInfoSlice.reducer;

@@ -5,9 +5,9 @@ import { useSelector } from "react-redux";
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const isLoggedIn = useSelector((store) => store.userInfo.isLoggedIn);
+  const userData = useSelector((store) => store.userInfo.userData);
 
-  return isLoggedIn ? (
+  return userData ? (
     <CustomerDashboard />
   ) : (
     <div className="flex flex-col md:flex-row bg-gray-100 min-h-screen p-8 overflow-hidden">

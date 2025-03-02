@@ -1,21 +1,26 @@
 import React, { useState } from "react";
 import { LOGO_IMG, PROFILE_LOGO } from "../assets/constants";
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setLogInTrue } from "../store/userInfoSlice";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaBars, FaTimes, FaUserCircle } from "react-icons/fa"; // Icons for the hamburger menu
+import { offLoadUserData } from "../store/userInfoSlice";
 
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const isLoggedIn = useSelector((store) => store.userInfo.isLoggedIn);
+  const userData = useSelector((store) => store.userInfo.userData);
+
   const [isMenuOpen, setIsMenuOpen] = useState(false); // State for mobile menu
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false); // State for profile dropdown
 
   const handleLogInClick = () => {
-    dispatch(setLogInTrue(!isLoggedIn));
-    navigate(isLoggedIn ? "/" : "/login");
+    if (userData) {
+      dispatch(offLoadUserData());
+      navigate("/");
+    } else {
+      navigate("/login");
+    }
   };
 
   const handleSignUpClicked = () => {
@@ -34,10 +39,12 @@ const Header = () => {
     <div className="bg-white shadow-sm sticky top-0 z-50">
       <div className="w-[75vw] h-28 mx-auto flex justify-between items-center text-gray-700">
         {/* Logo Section */}
-        <div className="p-2 flex items-center">
-          <img src={LOGO_IMG} alt="app-logo" className="w-16 rounded-2xl" />
-          <h1 className="-rotate-90 font-bold text-lg ml-2">Hey Bank</h1>
-        </div>
+        <Link to="/">
+          <div className="p-2 flex items-center">
+            <img src={LOGO_IMG} alt="app-logo" className="w-16 rounded-2xl" />
+            <h1 className="-rotate-90 font-bold text-lg">Hey Bank</h1>
+          </div>
+        </Link>
 
         {/* Hamburger Menu (Mobile) */}
         <div className="md:hidden">
@@ -99,7 +106,7 @@ const Header = () => {
 
         {/* User Actions */}
         <div className="hidden md:flex items-center space-x-6">
-          {isLoggedIn && (
+          {userData && (
             <div className="relative">
               <FaUserCircle
                 className="w-9 h-9 text-gray-700 cursor-pointer hover:text-blue-600 transition duration-300"
@@ -125,14 +132,14 @@ const Header = () => {
           <button
             onClick={handleLogInClick}
             className={`px-4 py-2 font-semibold rounded-md transition duration-300 ${
-              isLoggedIn
+              userData
                 ? "bg-red-500 text-white hover:bg-red-600"
                 : "bg-blue-500 text-white hover:bg-blue-600"
             }`}
           >
-            {isLoggedIn ? "Log Out" : "Log In"}
+            {!userData ? "Log In" : "Log Out"}
           </button>
-          {!isLoggedIn && (
+          {!userData && (
             <button
               onClick={handleSignUpClicked}
               className="px-4 py-2 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600 transition duration-300"
@@ -203,13 +210,13 @@ const Header = () => {
                 <button
                   onClick={handleLogInClick}
                   className={`w-full text-left text-lg ${
-                    isLoggedIn ? "text-red-500" : "text-blue-500"
+                    userData ? "text-red-500" : "text-blue-500"
                   } hover:text-blue-600`}
                 >
-                  {isLoggedIn ? "Log Out" : "Log In"}
+                  {!userData ? "Log In" : "Log Out"}
                 </button>
               </li>
-              {!isLoggedIn && (
+              {!userData && (
                 <li>
                   <button
                     onClick={handleSignUpClicked}
