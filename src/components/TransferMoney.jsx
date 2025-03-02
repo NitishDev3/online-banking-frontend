@@ -34,7 +34,7 @@ const TransferMoney = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-50 to-purple-50 flex flex-col justify-center items-center p-4">
+    <div className="min-h-[calc(100vh-4rem)] bg-gradient-to-r from-blue-50 to-purple-50 flex flex-col justify-center items-center p-4">
       {/* Transfer Money Card */}
       <div className="w-full max-w-lg bg-white rounded-xl shadow-2xl p-8">
         <h1 className="text-4xl font-bold text-gray-800 mb-8 text-center">

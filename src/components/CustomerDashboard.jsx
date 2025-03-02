@@ -5,7 +5,7 @@ const CustomerDashboard = () => {
   const userData = useSelector((store)=> store.userInfo.userData);
 
   return (
-    <div className="p-8">
+    <div className="p-8 min-h-[calc(100vh-4rem)]">
       <h1 className="text-3xl font-bold text-gray-800 mb-6">
         Welcome {userData.name}
       </h1>

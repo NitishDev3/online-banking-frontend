@@ -2,7 +2,7 @@ import React from "react";
 
 const About = () => {
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center py-12">
+    <div className="min-h-[calc(100vh-4rem)] bg-gray-100 flex flex-col items-center py-12">
       <div className="w-[75%] bg-white rounded-lg shadow-lg p-8">
         {/* Heading */}
         <h1 className="text-4xl font-bold text-gray-800 mb-6 text-center">

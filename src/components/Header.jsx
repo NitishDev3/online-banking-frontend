@@ -121,8 +121,14 @@ const Header = () => {
                     className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg"
                   >
                     <ul>
-                      <li className="px-4 py-2 hover:bg-gray-100">Profile</li>
-                      <li className="px-4 py-2 hover:bg-gray-100">Settings</li>
+                      <Link to={"/profile"}>
+                        <li className="px-4 py-2 hover:bg-gray-100">Profile</li>
+                      </Link>
+                      <Link to={"/settings"}>
+                        <li className="px-4 py-2 hover:bg-gray-100">
+                          Settings
+                        </li>
+                      </Link>
                     </ul>
                   </motion.div>
                 )}

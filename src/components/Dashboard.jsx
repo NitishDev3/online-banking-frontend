@@ -10,7 +10,7 @@ const Dashboard = () => {
   return userData ? (
     <CustomerDashboard />
   ) : (
-    <div className="flex flex-col md:flex-row bg-gray-100 min-h-screen p-8 overflow-hidden">
+    <div className="flex flex-col md:flex-row bg-gray-100 min-h-[calc(100vh-4rem)] p-8 overflow-hidden">
       {/* Left Section - Slides from Right */}
       <div className="w-full md:w-1/2 h-[85vh] flex flex-col justify-center items-center bg-white rounded-lg shadow-lg p-8 m-4 animate-slideLeft">
         <h1 className="text-gray-800 font-bold text-4xl md:text-5xl text-center mb-4">
