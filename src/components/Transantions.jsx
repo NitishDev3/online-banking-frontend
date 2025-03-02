@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Transactions = () => {
   // Sample transaction data
@@ -32,6 +34,16 @@ const Transactions = () => {
       status: "Completed",
     },
   ];
+
+  const userData = useSelector((store) => store.userInfo.userData);
+  const navigate = useNavigate()
+
+
+  useEffect(() => {
+      if (userData) {
+        return;
+      } else navigate("/login");
+    }, []);
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">

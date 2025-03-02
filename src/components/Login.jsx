@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
 import { updateButton } from "../store/configSlice";
@@ -8,6 +8,7 @@ import { loadUserData, offLoadUserData } from "../store/userInfoSlice";
 const Login = () => {
   const singInEmail = useRef("");
   const signInPassword = useRef("");
+  const [isLoading, setIsLoading] = useState(false); // State to track loading
   const userData = useSelector((store) => store.userInfo.userData);
   const logInSignUpBtn = useSelector((store) => store.config.logInSignUpBtn);
   const dispatch = useDispatch();
@@ -15,15 +16,21 @@ const Login = () => {
 
   const signInUser = async (inputData) => {
     try {
+      setIsLoading(true); // Start loading
       await axios
-        .post("https://online-banking-backend.vercel.app/api/auth/login", inputData)
+        .post(
+          "https://online-banking-backend.vercel.app/api/auth/login",
+          inputData
+        )
         .then(({ data }) => {
           dispatch(loadUserData(data));
           dispatch(updateButton("Log Out"));
-          navigate("/");
+          navigate("/"); // Redirect to home after successful login
         });
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false); // Stop loading
     }
   };
 
@@ -34,6 +41,7 @@ const Login = () => {
     };
 
     signInUser(inputData);
+    navigate("/loading"); // Redirect to loading page
   };
 
   return (
@@ -82,8 +90,9 @@ const Login = () => {
         <button
           className="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition duration-300"
           onClick={handleSignInClick}
+          disabled={isLoading} // Disable button while loading
         >
-          Log In
+          {isLoading ? "Logging In..." : "Log In"}
         </button>
 
         {/* Sign Up Link */}

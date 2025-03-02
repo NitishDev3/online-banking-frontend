@@ -1,29 +1,43 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const TransferMoney = () => {
+  const userData = useSelector((store) => store.userInfo.userData);
+
   const [recipientAccount, setRecipientAccount] = useState("");
   const [amount, setAmount] = useState("");
+  const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+
+  const navigate = useNavigate();
 
   const handleTransfer = (e) => {
     e.preventDefault();
     // Simulate a transfer (replace with actual API call)
-    if (recipientAccount && amount) {
+    if (recipientAccount && amount && password) {
       setMessage(
         `Successfully transferred $${amount} to account ${recipientAccount}`
       );
       setRecipientAccount("");
       setAmount("");
+      setPassword("");
     } else {
       setMessage("Please fill in all fields.");
     }
   };
 
+  useEffect(() => {
+    if (!userData) {
+      navigate("/login");
+    }
+  }, []);
+
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center p-4">
+    <div className="min-h-screen bg-gradient-to-r from-blue-50 to-purple-50 flex flex-col justify-center items-center p-4">
       {/* Transfer Money Card */}
-      <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-8">
-        <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+      <div className="w-full max-w-lg bg-white rounded-xl shadow-2xl p-8">
+        <h1 className="text-4xl font-bold text-gray-800 mb-8 text-center">
           Transfer Money
         </h1>
 
@@ -31,7 +45,7 @@ const TransferMoney = () => {
         <div className="mb-6">
           <label
             htmlFor="recipientAccount"
-            className="block text-gray-700 font-semibold mb-2"
+            className="block text-gray-700 font-medium mb-2"
           >
             Recipient Account Number
           </label>
@@ -41,7 +55,7 @@ const TransferMoney = () => {
             placeholder="Enter recipient's account number"
             value={recipientAccount}
             onChange={(e) => setRecipientAccount(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300"
           />
         </div>
 
@@ -49,7 +63,7 @@ const TransferMoney = () => {
         <div className="mb-6">
           <label
             htmlFor="amount"
-            className="block text-gray-700 font-semibold mb-2"
+            className="block text-gray-700 font-medium mb-2"
           >
             Amount
           </label>
@@ -59,31 +73,32 @@ const TransferMoney = () => {
             placeholder="Enter amount"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300"
           />
         </div>
 
-        {/* Recipient Account Field */}
-        <div className="mb-6">
+        {/* Password Field */}
+        <div className="mb-8">
           <label
             htmlFor="password"
-            className="block text-gray-700 font-semibold mb-2"
+            className="block text-gray-700 font-medium mb-2"
           >
             Password
           </label>
           <input
             type="password"
             id="password"
-            placeholder="Enter password"
-            value=""
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter your password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300"
           />
         </div>
 
         {/* Transfer Button */}
         <button
           onClick={handleTransfer}
-          className="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition duration-300"
+          className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition duration-300 shadow-lg"
         >
           Transfer
         </button>
@@ -92,7 +107,7 @@ const TransferMoney = () => {
         {message && (
           <div className="mt-6 text-center">
             <p
-              className={`text-sm ${
+              className={`text-sm font-medium ${
                 message.includes("Successfully")
                   ? "text-green-600"
                   : "text-red-600"
