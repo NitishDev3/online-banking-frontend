@@ -9,8 +9,7 @@ const Login = () => {
   const singInEmail = useRef("");
   const signInPassword = useRef("");
   const [isLoading, setIsLoading] = useState(false); // State to track loading
-  const userData = useSelector((store) => store.userInfo.userData);
-  const logInSignUpBtn = useSelector((store) => store.config.logInSignUpBtn);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -41,7 +40,6 @@ const Login = () => {
     };
 
     signInUser(inputData);
-    navigate("/loading"); // Redirect to loading page
   };
 
   return (

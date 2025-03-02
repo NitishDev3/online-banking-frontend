@@ -59,10 +59,6 @@ const appRouter = createBrowserRouter([
       {
         path: "/signup",
         element: <Signup />,
-      },
-      {
-        path: "/loading",
-        element: <LoadingPage />
       }
     ],
     errorElement: <NotFoundPage />,
