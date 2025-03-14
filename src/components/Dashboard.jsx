@@ -1,49 +1,107 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import CustomerDashboard from "./CustomerDashboard";
 import { useSelector } from "react-redux";
+import { motion } from "framer-motion";
+import { FaArrowRight, FaShieldAlt, FaChartLine } from "react-icons/fa";
+import CustomerDashboard from "./CustomerDashboard";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const userData = useSelector((store) => store.userInfo.userData);
 
-  return userData ? (
-    <CustomerDashboard />
-  ) : (
-    <div className="flex flex-col md:flex-row bg-gray-100 min-h-[calc(100vh-4rem)] p-8 overflow-hidden">
-      {/* Left Section - Slides from Right */}
-      <div className="w-full md:w-1/2 h-[85vh] flex flex-col justify-center items-center bg-white rounded-lg shadow-lg p-8 m-4 animate-slideLeft">
-        <h1 className="text-gray-800 font-bold text-4xl md:text-5xl text-center mb-4">
-          Banking at your Fingertip
-        </h1>
-        <p className="text-gray-600 text-lg text-center">
+  // Animation variants
+  const fadeIn = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { duration: 1 } },
+  };
+
+  const slideInLeft = {
+    hidden: { x: -100, opacity: 0 },
+    visible: { x: 0, opacity: 1, transition: { duration: 0.8 } },
+  };
+
+  const slideInRight = {
+    hidden: { x: 100, opacity: 0 },
+    visible: { x: 0, opacity: 1, transition: { duration: 0.8 } },
+  };
+
+  if (userData) {
+    return <CustomerDashboard />;
+  }
+
+  return (
+    <div className="flex flex-col md:flex-row bg-white min-h-[calc(100vh-4rem)] p-8 overflow-hidden">
+      {/* Left Section */}
+      <motion.div
+        className="w-full md:w-1/2 h-[85vh] flex flex-col justify-center items-center bg-gradient-to-r from-[#0d94fb] to-[#012652] rounded-lg shadow-2xl p-8 m-4"
+        variants={fadeIn}
+        initial="hidden"
+        animate="visible"
+      >
+        <motion.img
+          src="https://media.istockphoto.com/id/1401461124/photo/hand-of-businessman-using-smart-phone-with-coin-icon.jpg?s=612x612&w=0&k=20&c=937FY4moyMx2nplMSkHMSWMT4YpcHi1u7hykfYckwv0="
+          alt="Banking Illustration"
+          className="w-[60%] h-64 mb-6 rounded-sm"
+          variants={slideInLeft}
+        />
+        <motion.h1
+          className="text-white font-bold text-4xl md:text-5xl text-center mb-4"
+          variants={slideInRight}
+        >
+          Banking at Your Fingertip
+        </motion.h1>
+        <motion.p
+          className="text-gray-200 text-lg text-center mb-6"
+          variants={slideInLeft}
+        >
           Manage your finances seamlessly with our secure and intuitive banking
           platform.
-        </p>
-        <button
-          className="mt-6 bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-300"
+        </motion.p>
+        <motion.button
+          className="mt-6 bg-white text-[#012652] font-semibold py-3 px-6 rounded-lg hover:bg-gray-100 transition duration-300 flex items-center"
           onClick={() => navigate("/login")}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
         >
-          Get Started
-        </button>
-      </div>
+          Get Started <FaArrowRight className="ml-2" />
+        </motion.button>
+      </motion.div>
 
-      {/* Right Section - Slides from Left */}
-      <div className="w-full md:w-1/2 h-[85vh] flex flex-col justify-center items-center bg-white rounded-lg shadow-lg p-8 m-4 animate-slideRight">
-        <h1 className="text-gray-800 font-bold text-4xl md:text-5xl text-center mb-4">
+      {/* Right Section */}
+      <motion.div
+        className="w-full md:w-1/2 h-[85vh] flex flex-col justify-center items-center bg-white rounded-lg shadow-2xl p-8 m-4"
+        variants={fadeIn}
+        initial="hidden"
+        animate="visible"
+      >
+        <motion.img
+          src="https://www.axisbank.com/images/default-source/progress-with-us_new/what-is-digital-banking-security-top-11-security-measures.jpg?sfvrsn=98ae1456_2"
+          alt="Security Illustration"
+          className="w-[60%] h-64 mb-6"
+          variants={slideInRight}
+        />
+        <motion.h1
+          className="text-[#012652] font-bold text-4xl md:text-5xl text-center mb-4"
+          variants={slideInLeft}
+        >
           Secure & Reliable
-        </h1>
-        <p className="text-gray-600 text-lg text-center">
+        </motion.h1>
+        <motion.p
+          className="text-gray-600 text-lg text-center mb-6"
+          variants={slideInRight}
+        >
           Your security is our top priority. Enjoy peace of mind with our
           advanced encryption technology.
-        </p>
-        <button
-          className="mt-6 bg-green-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-green-700 transition duration-300"
-          onClick={() => navigate("about")}
+        </motion.p>
+        <motion.button
+          className="mt-6 bg-[#4CAF50] text-white font-semibold py-3 px-6 rounded-lg hover:bg-[#45a049] transition duration-300 flex items-center"
+          onClick={() => navigate("/about")}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
         >
-          Learn More
-        </button>
-      </div>
+          Learn More <FaShieldAlt className="ml-2" />
+        </motion.button>
+      </motion.div>
     </div>
   );
 };

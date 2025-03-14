@@ -35,15 +35,36 @@ const Header = () => {
     setIsProfileDropdownOpen(!isProfileDropdownOpen);
   };
 
+  // Animation variants
+  const fadeIn = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { duration: 0.5 } },
+  };
+
+  const slideInLeft = {
+    hidden: { x: -100, opacity: 0 },
+    visible: { x: 0, opacity: 1, transition: { duration: 0.8 } },
+  };
+
+  const slideInRight = {
+    hidden: { x: 100, opacity: 0 },
+    visible: { x: 0, opacity: 1, transition: { duration: 0.8 } },
+  };
+
   return (
-    <div className="bg-white shadow-sm sticky top-0 z-50">
+    <motion.div
+      className="bg-white shadow-sm sticky top-0 z-50"
+      initial="hidden"
+      animate="visible"
+      variants={fadeIn}
+    >
       <div className="w-[75vw] h-28 mx-auto flex justify-between items-center text-gray-700">
         {/* Logo Section */}
         <Link to="/">
-          <div className="p-2 flex items-center">
+          <motion.div className="p-2 flex items-center" variants={slideInLeft}>
             <img src={LOGO_IMG} alt="app-logo" className="w-16 rounded-2xl" />
             <h1 className="-rotate-90 font-bold text-lg">Hey Bank</h1>
-          </div>
+          </motion.div>
         </Link>
 
         {/* Hamburger Menu (Mobile) */}
@@ -61,12 +82,15 @@ const Header = () => {
         </div>
 
         {/* Navigation Links (Desktop) */}
-        <nav className="hidden md:flex space-x-6">
+        <motion.nav
+          className="hidden md:flex space-x-6"
+          variants={slideInRight}
+        >
           <NavLink
             to="/"
             className={({ isActive }) =>
-              `text-lg hover:text-blue-600 transition duration-300 ${
-                isActive ? "text-blue-600 font-semibold" : ""
+              `text-lg hover:text-[#0d94fb] transition duration-300 ${
+                isActive ? "text-[#0d94fb] font-semibold" : ""
               }`
             }
           >
@@ -75,8 +99,8 @@ const Header = () => {
           <NavLink
             to="/transfermoney"
             className={({ isActive }) =>
-              `text-lg hover:text-blue-600 transition duration-300 ${
-                isActive ? "text-blue-600 font-semibold" : ""
+              `text-lg hover:text-[#0d94fb] transition duration-300 ${
+                isActive ? "text-[#0d94fb] font-semibold" : ""
               }`
             }
           >
@@ -85,8 +109,8 @@ const Header = () => {
           <NavLink
             to="/transactions"
             className={({ isActive }) =>
-              `text-lg hover:text-blue-600 transition duration-300 ${
-                isActive ? "text-blue-600 font-semibold" : ""
+              `text-lg hover:text-[#0d94fb] transition duration-300 ${
+                isActive ? "text-[#0d94fb] font-semibold" : ""
               }`
             }
           >
@@ -95,21 +119,24 @@ const Header = () => {
           <NavLink
             to="/about"
             className={({ isActive }) =>
-              `text-lg hover:text-blue-600 transition duration-300 ${
-                isActive ? "text-blue-600 font-semibold" : ""
+              `text-lg hover:text-[#0d94fb] transition duration-300 ${
+                isActive ? "text-[#0d94fb] font-semibold" : ""
               }`
             }
           >
             About Us
           </NavLink>
-        </nav>
+        </motion.nav>
 
         {/* User Actions */}
-        <div className="hidden md:flex items-center space-x-6">
+        <motion.div
+          className="hidden md:flex items-center space-x-6"
+          variants={slideInRight}
+        >
           {userData && (
             <div className="relative">
               <FaUserCircle
-                className="w-9 h-9 text-gray-700 cursor-pointer hover:text-blue-600 transition duration-300"
+                className="w-9 h-9 text-gray-700 cursor-pointer hover:text-[#0d94fb] transition duration-300"
                 onClick={toggleProfileDropdown}
               />
               <AnimatePresence>
@@ -140,7 +167,7 @@ const Header = () => {
             className={`px-4 py-2 font-semibold rounded-md transition duration-300 ${
               userData
                 ? "bg-red-500 text-white hover:bg-red-600"
-                : "bg-blue-500 text-white hover:bg-blue-600"
+                : "bg-[#0d94fb] text-white hover:bg-[#012652]"
             }`}
           >
             {!userData ? "Log In" : "Log Out"}
@@ -153,7 +180,7 @@ const Header = () => {
               Sign Up ➔
             </button>
           )}
-        </div>
+        </motion.div>
       </div>
 
       {/* Mobile Menu (Dropdown) */}
@@ -169,7 +196,7 @@ const Header = () => {
               <li>
                 <NavLink
                   to="/"
-                  className="text-lg hover:text-blue-600"
+                  className="text-lg hover:text-[#0d94fb]"
                   onClick={toggleMenu}
                 >
                   Dashboard
@@ -178,7 +205,7 @@ const Header = () => {
               <li>
                 <NavLink
                   to="/transfermoney"
-                  className="text-lg hover:text-blue-600"
+                  className="text-lg hover:text-[#0d94fb]"
                   onClick={toggleMenu}
                 >
                   Transfer Money
@@ -187,7 +214,7 @@ const Header = () => {
               <li>
                 <NavLink
                   to="/transactions"
-                  className="text-lg hover:text-blue-600"
+                  className="text-lg hover:text-[#0d94fb]"
                   onClick={toggleMenu}
                 >
                   Transactions
@@ -196,17 +223,17 @@ const Header = () => {
               <li>
                 <NavLink
                   to="/about"
-                  className="text-lg hover:text-blue-600"
+                  className="text-lg hover:text-[#0d94fb]"
                   onClick={toggleMenu}
                 >
                   About Us
                 </NavLink>
               </li>
-              {isLoggedIn && (
+              {userData && (
                 <li>
                   <button
                     onClick={toggleProfileDropdown}
-                    className="text-lg hover:text-blue-600"
+                    className="text-lg hover:text-[#0d94fb]"
                   >
                     Profile
                   </button>
@@ -216,8 +243,8 @@ const Header = () => {
                 <button
                   onClick={handleLogInClick}
                   className={`w-full text-left text-lg ${
-                    userData ? "text-red-500" : "text-blue-500"
-                  } hover:text-blue-600`}
+                    userData ? "text-red-500" : "text-[#0d94fb]"
+                  } hover:text-[#012652]`}
                 >
                   {!userData ? "Log In" : "Log Out"}
                 </button>
@@ -236,7 +263,7 @@ const Header = () => {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </motion.div>
   );
 };
 

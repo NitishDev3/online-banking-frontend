@@ -1,15 +1,20 @@
 import axios from "axios";
 import React, { useRef } from "react";
 import { data, NavLink } from "react-router-dom";
+import { BASE_API_URL } from "../assets/constants";
 
 const Signup = () => {
   const signUpEmail = useRef("");
   const signUpName = useRef("");
   const signUpPassword = useRef("");
 
+  const navigate = useNavigate();
+
   const registerUser = async (inputData) => {
     try {
-      await axios.post("https://online-banking-backend.vercel.app/api/auth/register", inputData);
+      await axios.post(BASE_API_URL + "/signup", inputData);
+      navigate("/login");
+      alert("User registered successfully!");
     } catch (error) {
       console.log(error);
     }

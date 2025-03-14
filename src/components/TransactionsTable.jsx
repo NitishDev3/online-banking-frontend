@@ -1,33 +1,61 @@
 import React from "react";
-import TransactionData from "./TransactionData";
 
-const TransactionsTable = ({transactions}) => {
+const TransactionsTable = ({ transactions }) => {
   return (
-    <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-      <table className="min-w-full">
-        <thead className="bg-gray-200">
-          <tr>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-              Date
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-              Description
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-              Amount
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-              Status
-            </th>
+    <table className="w-full">
+      <thead className="bg-gray-50">
+        <tr>
+          <th className="px-4 py-2 text-left text-sm font-medium text-gray-500 uppercase">
+            Account Holder
+          </th>
+          <th className="px-4 py-2 text-left text-sm font-medium text-gray-500 uppercase">
+            Amount
+          </th>
+          <th className="px-4 py-2 text-left text-sm font-medium text-gray-500 uppercase">
+            Type
+          </th>
+          <th className="px-4 py-2 text-left text-sm font-medium text-gray-500 uppercase">
+            Status
+          </th>
+          <th className="px-4 py-2 text-left text-sm font-medium text-gray-500 uppercase">
+            Date & Time
+          </th>
+        </tr>
+      </thead>
+      <tbody className="divide-y divide-gray-200">
+        {transactions.map((transaction) => (
+          <tr key={transaction._id} className="hover:bg-gray-50 transition-colors">
+            <td className="px-4 py-3 text-sm text-gray-700">
+              {transaction.type === "credit"
+                ? transaction.fromAccountName
+                : transaction.toAccountName}
+            </td>
+            <td
+              className={`px-4 py-3 text-sm font-medium ${
+                transaction.type === "debit" ? "text-red-600" : "text-green-600"
+              }`}
+            >
+              {transaction.type === "debit" ? "-" : "+"}${transaction.amount}
+            </td>
+            <td className="px-4 py-3 text-sm text-gray-700 capitalize">
+              {transaction.type}
+            </td>
+            <td
+              className={`px-4 py-3 text-sm font-medium ${
+                transaction.status === "success"
+                  ? "text-green-600"
+                  : "text-red-600"
+              }`}
+            >
+              {transaction.status || "Completed"}
+            </td>
+            <td className="px-4 py-3 text-sm text-gray-700">
+              {new Date(transaction.createdAt).toLocaleString()}
+            </td>
           </tr>
-        </thead>
-        <tbody className="divide-y divide-gray-200">
-          {transactions.map((transaction) => (
-            <TransactionData transaction={transaction} />
-          ))}
-        </tbody>
-      </table>
-    </div>
+        ))}
+      </tbody>
+    </table>
   );
 };
 

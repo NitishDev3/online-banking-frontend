@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
 import { updateButton } from "../store/configSlice";
 import { loadUserData, offLoadUserData } from "../store/userInfoSlice";
+import { BASE_API_URL } from "../assets/constants";
 
 const Login = () => {
   const singInEmail = useRef("");
@@ -17,10 +18,9 @@ const Login = () => {
     try {
       setIsLoading(true); // Start loading
       await axios
-        .post(
-          "https://online-banking-backend.vercel.app/api/auth/login",
-          inputData
-        )
+        .post( BASE_API_URL +"/login", inputData, {
+          withCredentials: true,
+        })
         .then(({ data }) => {
           dispatch(loadUserData(data));
           dispatch(updateButton("Log Out"));
@@ -35,7 +35,7 @@ const Login = () => {
 
   const handleSignInClick = () => {
     const inputData = {
-      email: singInEmail.current.value,
+      emailId: singInEmail.current.value,
       password: signInPassword.current.value,
     };
 
