@@ -15,7 +15,7 @@ const CustomerDashboard = () => {
   useEffect(() => {
     const fetchAccountData = async () => {
       try {
-        const response = await axios.get( BASE_API_URL + "/account", {
+        const response = await axios.get(BASE_API_URL + "/account", {
           withCredentials: true,
         });
         setAccountData(response.data.data);
