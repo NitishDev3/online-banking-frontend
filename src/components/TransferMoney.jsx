@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { BASE_API_URL } from "../assets/constants";
 
 const TransferMoney = () => {
   const userData = useSelector((store) => store.userInfo.userData);

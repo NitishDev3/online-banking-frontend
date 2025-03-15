@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import TransactionsTable from "./TransactionsTable";
+import { BASE_API_URL } from "../assets/constants";
 
 const Transactions = () => {
   const userData = useSelector((store) => store.userInfo.userData);
