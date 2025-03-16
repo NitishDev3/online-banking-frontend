@@ -8,6 +8,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Dashboard from "./components/Dashboard.jsx";
 import LoadingPage from "./exceptionComp/LoadingPage.jsx";
 import NotFoundPage from "./exceptionComp/NotFoundPage.jsx";
+import Profile from "./components/Profile.jsx";
 
 const About = lazy(() => import("./components/About.jsx"));
 const Login = lazy(() => import("./components/Login.jsx"));
@@ -59,7 +60,11 @@ const appRouter = createBrowserRouter([
       {
         path: "/signup",
         element: <Signup />,
-      }
+      },
+      {
+        path: "/profile",
+        element: <Profile />,
+      },
     ],
     errorElement: <NotFoundPage />,
   },

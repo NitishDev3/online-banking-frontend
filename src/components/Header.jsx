@@ -1,38 +1,32 @@
 import React, { useState } from "react";
-import { LOGO_IMG, PROFILE_LOGO } from "../assets/constants";
+import { BASE_API_URL, LOGO_IMG } from "../assets/constants";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaBars, FaTimes, FaUserCircle } from "react-icons/fa"; // Icons for the hamburger menu
-import { offLoadUserData } from "../store/userInfoSlice";
+import axios from "axios";
+import { offLoadAccountData, offLoadUserData } from "../store/userInfoSlice";
 
 const Header = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const userData = useSelector((store) => store.userInfo.userData);
+  const dispatch = useDispatch();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false); // State for mobile menu
-  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false); // State for profile dropdown
 
-  const handleLogInClick = () => {
-    if (userData) {
+  const handleLogOut = async () => {
+    try {
+      await axios.post(BASE_API_URL + "/logout", {}, { withCredentials: true });
       dispatch(offLoadUserData());
+      dispatch(offLoadAccountData());
       navigate("/");
-    } else {
-      navigate("/login");
+    } catch (error) {
+      console.error("Error logging out:", error.message);
     }
-  };
-
-  const handleSignUpClicked = () => {
-    navigate("/signup");
   };
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
-  };
-
-  const toggleProfileDropdown = () => {
-    setIsProfileDropdownOpen(!isProfileDropdownOpen);
   };
 
   // Animation variants
@@ -58,12 +52,12 @@ const Header = () => {
       animate="visible"
       variants={fadeIn}
     >
-      <div className="w-[75vw] h-28 mx-auto flex justify-between items-center text-gray-700">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-20 flex justify-between items-center">
         {/* Logo Section */}
         <Link to="/">
-          <motion.div className="p-2 flex items-center" variants={slideInLeft}>
-            <img src={LOGO_IMG} alt="app-logo" className="w-16 rounded-2xl" />
-            <h1 className="-rotate-90 font-bold text-lg">Hey Bank</h1>
+          <motion.div className="flex items-center" variants={slideInLeft}>
+            <img src={LOGO_IMG} alt="app-logo" className="w-12 sm:w-16 rounded-2xl" />
+            <h1 className="-rotate-90 font-bold text-sm sm:text-lg ml-2">Hey Bank</h1>
           </motion.div>
         </Link>
 
@@ -83,13 +77,13 @@ const Header = () => {
 
         {/* Navigation Links (Desktop) */}
         <motion.nav
-          className="hidden md:flex space-x-6"
+          className="hidden md:flex space-x-4 lg:space-x-6"
           variants={slideInRight}
         >
           <NavLink
             to="/"
             className={({ isActive }) =>
-              `text-lg hover:text-[#0d94fb] transition duration-300 ${
+              `text-sm lg:text-lg hover:text-[#0d94fb] transition duration-300 ${
                 isActive ? "text-[#0d94fb] font-semibold" : ""
               }`
             }
@@ -99,7 +93,7 @@ const Header = () => {
           <NavLink
             to="/transfermoney"
             className={({ isActive }) =>
-              `text-lg hover:text-[#0d94fb] transition duration-300 ${
+              `text-sm lg:text-lg hover:text-[#0d94fb] transition duration-300 ${
                 isActive ? "text-[#0d94fb] font-semibold" : ""
               }`
             }
@@ -109,7 +103,7 @@ const Header = () => {
           <NavLink
             to="/transactions"
             className={({ isActive }) =>
-              `text-lg hover:text-[#0d94fb] transition duration-300 ${
+              `text-sm lg:text-lg hover:text-[#0d94fb] transition duration-300 ${
                 isActive ? "text-[#0d94fb] font-semibold" : ""
               }`
             }
@@ -119,7 +113,7 @@ const Header = () => {
           <NavLink
             to="/about"
             className={({ isActive }) =>
-              `text-lg hover:text-[#0d94fb] transition duration-300 ${
+              `text-sm lg:text-lg hover:text-[#0d94fb] transition duration-300 ${
                 isActive ? "text-[#0d94fb] font-semibold" : ""
               }`
             }
@@ -130,55 +124,37 @@ const Header = () => {
 
         {/* User Actions */}
         <motion.div
-          className="hidden md:flex items-center space-x-6"
+          className="hidden md:flex items-center space-x-4 lg:space-x-6"
           variants={slideInRight}
         >
           {userData && (
-            <div className="relative">
-              <FaUserCircle
-                className="w-9 h-9 text-gray-700 cursor-pointer hover:text-[#0d94fb] transition duration-300"
-                onClick={toggleProfileDropdown}
-              />
-              <AnimatePresence>
-                {isProfileDropdownOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg"
-                  >
-                    <ul>
-                      <Link to={"/profile"}>
-                        <li className="px-4 py-2 hover:bg-gray-100">Profile</li>
-                      </Link>
-                      <Link to={"/settings"}>
-                        <li className="px-4 py-2 hover:bg-gray-100">
-                          Settings
-                        </li>
-                      </Link>
-                    </ul>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
+            <Link to="/profile">
+              <FaUserCircle className="w-7 h-7 sm:w-9 sm:h-9 text-gray-700 cursor-pointer hover:text-[#0d94fb] transition duration-300" />
+            </Link>
           )}
-          <button
-            onClick={handleLogInClick}
-            className={`px-4 py-2 font-semibold rounded-md transition duration-300 ${
-              userData
-                ? "bg-red-500 text-white hover:bg-red-600"
-                : "bg-[#0d94fb] text-white hover:bg-[#012652]"
-            }`}
-          >
-            {!userData ? "Log In" : "Log Out"}
-          </button>
-          {!userData && (
+
+          {userData ? (
             <button
-              onClick={handleSignUpClicked}
-              className="px-4 py-2 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600 transition duration-300"
+              onClick={handleLogOut}
+              className="px-3 py-1.5 sm:px-4 sm:py-2 bg-red-500 text-white text-sm sm:text-base font-semibold rounded-md hover:bg-red-600 transition duration-300"
             >
-              Sign Up ➔
+              Log Out
             </button>
+          ) : (
+            <>
+              <button
+                onClick={() => navigate("/login")}
+                className="px-3 py-1.5 sm:px-4 sm:py-2 bg-[#0d94fb] text-white text-sm sm:text-base font-semibold rounded-md hover:bg-[#012652] transition duration-300"
+              >
+                Log In
+              </button>
+              <button
+                onClick={() => navigate("/signup")}
+                className="px-3 py-1.5 sm:px-4 sm:py-2 bg-green-500 text-white text-sm sm:text-base font-semibold rounded-md hover:bg-green-600 transition duration-300"
+              >
+                Sign Up ➔
+              </button>
+            </>
           )}
         </motion.div>
       </div>
@@ -231,28 +207,29 @@ const Header = () => {
               </li>
               {userData && (
                 <li>
-                  <button
-                    onClick={toggleProfileDropdown}
+                  <Link
+                    to="/profile"
                     className="text-lg hover:text-[#0d94fb]"
+                    onClick={toggleMenu}
                   >
                     Profile
-                  </button>
+                  </Link>
                 </li>
               )}
               <li>
                 <button
-                  onClick={handleLogInClick}
+                  onClick={userData ? handleLogOut : () => navigate("/login")}
                   className={`w-full text-left text-lg ${
                     userData ? "text-red-500" : "text-[#0d94fb]"
                   } hover:text-[#012652]`}
                 >
-                  {!userData ? "Log In" : "Log Out"}
+                  {userData ? "Log Out" : "Log In"}
                 </button>
               </li>
               {!userData && (
                 <li>
                   <button
-                    onClick={handleSignUpClicked}
+                    onClick={() => navigate("/signup")}
                     className="w-full text-left text-lg text-green-500 hover:text-green-600"
                   >
                     Sign Up ➔

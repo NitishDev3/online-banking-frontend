@@ -1,13 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import { FaArrowRight, FaShieldAlt, FaChartLine } from "react-icons/fa";
 import CustomerDashboard from "./CustomerDashboard";
+import { loadAccountData, loadUserData } from "../store/userInfoSlice";
+import axios from "axios";
+import { BASE_API_URL } from "../assets/constants";
+import { toast } from "react-toastify";
+import { fetchAccountData, fetchProfileData } from "../utils/appLoadFetchFunctions";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const userData = useSelector((store) => store.userInfo.userData);
+  const accountData = useSelector((store) => store.userInfo.accountData);
+
+  const dispatch = useDispatch();
 
   // Animation variants
   const fadeIn = {
@@ -25,7 +33,33 @@ const Dashboard = () => {
     visible: { x: 0, opacity: 1, transition: { duration: 0.8 } },
   };
 
-  if (userData) {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const profileDataFetched = await fetchProfileData();
+        if (profileDataFetched) {
+          dispatch(loadUserData(profileDataFetched));
+        } else {
+          navigate("/");
+          return;
+        }
+
+        const accountDataFetched = await fetchAccountData();
+        if (accountDataFetched) {
+          dispatch(loadAccountData(accountDataFetched));
+        } else {
+          navigate("/profile");
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        toast.error("Failed to load data. Please try again.");
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (accountData) {
     return <CustomerDashboard />;
   }
 

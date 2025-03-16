@@ -2,27 +2,28 @@ import React from "react";
 
 const About = () => {
   return (
-    <div className="min-h-[calc(100vh-4rem)] bg-gray-100 flex flex-col items-center py-12">
-      <div className="w-[75%] bg-white rounded-lg shadow-lg p-8">
+    <div className="min-h-[calc(100vh-4rem)] bg-gray-100 flex flex-col items-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+      {/* Main Content Container */}
+      <div className="w-full max-w-4xl bg-white rounded-lg shadow-lg p-6 sm:p-8">
         {/* Heading */}
-        <h1 className="text-4xl font-bold text-gray-800 mb-6 text-center">
+        <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-4 sm:mb-6 text-center">
           About Hey Bank
         </h1>
 
         {/* Introduction */}
-        <p className="text-lg text-gray-700 mb-6">
+        <p className="text-base sm:text-lg text-gray-700 mb-4 sm:mb-6">
           Welcome to <strong className="text-blue-600">Hey Bank</strong>, your
           trusted partner in financial services. At Hey Bank, we are committed to
           providing you with a seamless and secure banking experience that fits
-          your lifestyle. Whether you're managing your daily expenses, saving
-          for the future, or planning for big life events, we've got you covered.
+          your lifestyle. Whether you're managing your daily expenses, saving for
+          the future, or planning for big life events, we've got you covered.
         </p>
 
         {/* Our Services */}
-        <h2 className="text-2xl font-semibold text-gray-800 mt-8 mb-4">
+        <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mt-6 sm:mt-8 mb-3 sm:mb-4">
           Our Services
         </h2>
-        <ul className="list-disc list-inside text-lg text-gray-700 mb-6">
+        <ul className="list-disc list-inside text-base sm:text-lg text-gray-700 mb-4 sm:mb-6">
           <li className="mb-2">
             <strong className="text-blue-600">Personal Banking:</strong> Manage
             your accounts, transfer funds, and pay bills with ease.
@@ -48,10 +49,10 @@ const About = () => {
         </ul>
 
         {/* Why Choose Hey Bank? */}
-        <h2 className="text-2xl font-semibold text-gray-800 mt-8 mb-4">
+        <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mt-6 sm:mt-8 mb-3 sm:mb-4">
           Why Choose Hey Bank?
         </h2>
-        <p className="text-lg text-gray-700 mb-6">
+        <p className="text-base sm:text-lg text-gray-700 mb-4 sm:mb-6">
           At Hey Bank, we believe that banking should be simple, transparent, and
           accessible to everyone. Our easy-to-use platforms, combined with
           top-notch customer service, ensure that you have everything you need to
@@ -61,10 +62,10 @@ const About = () => {
         </p>
 
         {/* Our Mission */}
-        <h2 className="text-2xl font-semibold text-gray-800 mt-8 mb-4">
+        <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mt-6 sm:mt-8 mb-3 sm:mb-4">
           Our Mission
         </h2>
-        <p className="text-lg text-gray-700 mb-6">
+        <p className="text-base sm:text-lg text-gray-700 mb-4 sm:mb-6">
           Our mission is to empower our customers by providing them with the
           tools and resources they need to achieve their financial goals. We
           strive to build long-lasting relationships based on trust, integrity,
@@ -72,7 +73,7 @@ const About = () => {
         </p>
 
         {/* Closing Message */}
-        <p className="text-lg text-gray-700">
+        <p className="text-base sm:text-lg text-gray-700">
           Thank you for choosing Hey Bank. We look forward to serving you and
           helping you achieve your financial dreams.
         </p>

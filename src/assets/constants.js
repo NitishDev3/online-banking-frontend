@@ -1,5 +1,6 @@
 //if in development mode
-export const BASE_API_URL  = "https://hey-bank-backend.vercel.app"
+export const BASE_API_URL = "https://hey-bank-backend.vercel.app"
+// export const BASE_API_URL = "http://localhost:5555";
 
 export const LOGO_IMG = "https://i.pinimg.com/564x/03/61/9e/03619ecfb11fadc9d9fcfe5fa8ac9bbd.jpg";
 

@@ -8,16 +8,30 @@ const TransferMoney = () => {
   const userData = useSelector((store) => store.userInfo.userData);
   const navigate = useNavigate();
 
-  const [recipientAccount, setRecipientAccount] = useState("");
-  const [amount, setAmount] = useState("");
-  const [password, setPassword] = useState("");
+  const [formData, setFormData] = useState({
+    recipientAccount: "",
+    amount: "",
+    password: "",
+  });
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // Redirect to login if user is not authenticated
+  if (!userData) {
+    navigate("/login");
+    return null;
+  }
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
   const handleTransfer = async (e) => {
     e.preventDefault();
 
     // Validate inputs
+    const { recipientAccount, amount, password } = formData;
     if (!recipientAccount || !amount || !password) {
       setMessage("Please fill in all fields.");
       return;
@@ -47,26 +61,16 @@ const TransferMoney = () => {
       setMessage(
         `Successfully transferred $${amount} to account ${recipientAccount}`
       );
-      setRecipientAccount("");
-      setAmount("");
-      setPassword("");
+      setFormData({ recipientAccount: "", amount: "", password: "" }); // Clear form
     } catch (error) {
       // Handle errors
-      if (error.response) {
-        setMessage(error.response.data.message || "Transfer failed.");
-      } else {
-        setMessage("An error occurred. Please try again.");
-      }
+      const errorMessage =
+        error.response?.data?.message || "An error occurred. Please try again.";
+      setMessage(errorMessage);
     } finally {
       setLoading(false);
     }
   };
-
-  // Redirect to login if user is not authenticated
-  if (!userData) {
-    navigate("/login");
-    return null;
-  }
 
   return (
     <div className="min-h-[calc(100vh-4rem)] bg-gradient-to-r from-blue-50 to-purple-50 flex flex-col justify-center items-center p-4">
@@ -87,9 +91,10 @@ const TransferMoney = () => {
           <input
             type="text"
             id="recipientAccount"
+            name="recipientAccount"
             placeholder="Enter recipient's account number"
-            value={recipientAccount}
-            onChange={(e) => setRecipientAccount(e.target.value)}
+            value={formData.recipientAccount}
+            onChange={handleChange}
             className="w-full px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300"
           />
         </div>
@@ -105,9 +110,10 @@ const TransferMoney = () => {
           <input
             type="number"
             id="amount"
+            name="amount"
             placeholder="Enter amount"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
+            value={formData.amount}
+            onChange={handleChange}
             className="w-full px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300"
           />
         </div>
@@ -123,9 +129,10 @@ const TransferMoney = () => {
           <input
             type="password"
             id="password"
+            name="password"
             placeholder="Enter your password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={formData.password}
+            onChange={handleChange}
             className="w-full px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300"
           />
         </div>
@@ -136,7 +143,13 @@ const TransferMoney = () => {
           disabled={loading}
           className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold py-2 md:py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition duration-300 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {loading ? "Processing..." : "Transfer"}
+          {loading ? (
+            <>
+              <span className="animate-pulse">Processing...</span>
+            </>
+          ) : (
+            "Transfer"
+          )}
         </button>
 
         {/* Message */}

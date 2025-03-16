@@ -6,32 +6,36 @@ import { BASE_API_URL } from "../assets/constants";
 
 const CustomerDashboard = () => {
   const userData = useSelector((store) => store.userInfo.userData);
-  const [accountData, setAccountData] = useState(null);
+  const accountDataFromStore = useSelector((store) => store.userInfo.accountData);
+  const [accountData, setAccountData] = useState(accountDataFromStore || { accountBalance: 0, accountNumber: '', accountId: {} });
+
   const [depositAmount, setDepositAmount] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Fetch account data on component mount
   useEffect(() => {
-    const fetchAccountData = async () => {
-      try {
-        const response = await axios.get(BASE_API_URL + "/account", {
-          withCredentials: true,
-        });
-        setAccountData(response.data.data);
-      } catch (error) {
-        console.error("Error fetching account data:", error);
-        setError("Failed to fetch account data.");
-      }
-    };
+    if (!accountDataFromStore) {
+      fetchAccountData();
+    }
+  }, [accountDataFromStore]);
 
-    fetchAccountData();
-  }, []);
+  const fetchAccountData = async () => {
+    try {
+      const response = await axios.get(BASE_API_URL + "/account", {
+        withCredentials: true,
+      });
+      setAccountData(response.data);
+    } catch (err) {
+      console.error("Error fetching account data:", err);
+      setError("Failed to load account data.");
+      setAccountData({ accountBalance: 0, accountNumber: '', accountId: {} });
+    }
+  };
 
-  // Handle deposit
   const handleDeposit = async () => {
-    if (!depositAmount || isNaN(depositAmount) || depositAmount <= 0) {
-      setError("Please enter a valid amount.");
+    const amount = parseFloat(depositAmount);
+    if (!amount || amount <= 0 || amount > 1000000) {
+      setError("Please enter a valid amount between $0 and $1,000,000.");
       return;
     }
 
@@ -41,27 +45,28 @@ const CustomerDashboard = () => {
     try {
       const response = await axios.post(
         BASE_API_URL + "/deposit",
-        {
-          amount: parseFloat(depositAmount),
-        },
+        { amount },
         { withCredentials: true }
       );
 
-      // Update account balance in the UI
       setAccountData((prevData) => ({
         ...prevData,
-        accountBalance: prevData.accountBalance + parseFloat(depositAmount),
+        accountBalance: prevData.accountBalance + amount,
       }));
 
       setDepositAmount("");
       alert("Deposit successful!");
     } catch (error) {
       console.error("Error depositing money:", error);
-      setError("Failed to deposit money.");
+      setError(
+        error.response?.data?.message || "Failed to deposit money. Please try again."
+      );
     } finally {
       setLoading(false);
     }
   };
+
+  const { accountBalance, accountNumber, accountId } = accountData;
 
   return (
     <div className="p-8 min-h-[calc(100vh-4rem)] bg-gray-100">
@@ -91,39 +96,28 @@ const CustomerDashboard = () => {
           transition={{ delay: 0.2 }}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
-          {/* Account Balance Card */}
           <motion.div
             whileHover={{ scale: 1.05 }}
             className="bg-white p-6 rounded-lg shadow-lg"
           >
-            <h2 className="text-xl font-semibold text-gray-800">
-              Account Balance
-            </h2>
-            <p className="text-gray-600 mt-2">
-              ${accountData.accountBalance.toFixed(2)}
-            </p>
+            <h2 className="text-xl font-semibold text-gray-800">Account Balance</h2>
+            <p className="text-gray-600 mt-2">${accountBalance.toFixed(2)}</p>
           </motion.div>
 
-          {/* Account Number Card */}
           <motion.div
             whileHover={{ scale: 1.05 }}
             className="bg-white p-6 rounded-lg shadow-lg"
           >
-            <h2 className="text-xl font-semibold text-gray-800">
-              Account Number
-            </h2>
-            <p className="text-gray-600 mt-2">{accountData.accountNumber}</p>
-            <p>{accountData.accountId.firstName}</p>
+            <h2 className="text-xl font-semibold text-gray-800">Account Number</h2>
+            <p className="text-gray-600 mt-2">{accountNumber}</p>
+            <p>{accountId.firstName || 'N/A'}</p>
           </motion.div>
 
-          {/* Deposit Money Card */}
           <motion.div
             whileHover={{ scale: 1.05 }}
             className="bg-white p-6 rounded-lg shadow-lg"
           >
-            <h2 className="text-xl font-semibold text-gray-800">
-              Deposit Money
-            </h2>
+            <h2 className="text-xl font-semibold text-gray-800">Deposit Money</h2>
             <div className="mt-4">
               <input
                 type="number"
@@ -148,7 +142,7 @@ const CustomerDashboard = () => {
           animate={{ opacity: 1 }}
           className="text-gray-600"
         >
-          Loading account data...
+          {loading ? "Loading account data..." : "No account data available."}
         </motion.div>
       )}
     </div>

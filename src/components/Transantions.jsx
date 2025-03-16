@@ -42,28 +42,31 @@ const Transactions = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-4 md:p-8">
-      <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4 md:mb-6">
-        Transaction History
-      </h1>
+      <div className="max-w-7xl mx-auto">
+        {/* Page Title */}
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4 md:mb-6">
+          Transaction History
+        </h1>
 
-      {/* Loading State */}
-      {loading && (
-        <div className="text-center text-gray-600">Loading transactions...</div>
-      )}
+        {/* Loading State */}
+        {loading && (
+          <div className="text-center text-gray-600">Loading transactions...</div>
+        )}
 
-      {/* Error Message */}
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-          {error}
-        </div>
-      )}
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            {error}
+          </div>
+        )}
 
-      {/* Transactions Table */}
-      {!loading && !error && (
-        <div className="bg-white rounded-lg shadow-lg overflow-x-auto">
-          <TransactionsTable transactions={transactions} />
-        </div>
-      )}
+        {/* Transactions Table */}
+        {!loading && !error && (
+          <div className="bg-white rounded-lg shadow-lg overflow-x-auto">
+            <TransactionsTable transactions={transactions} />
+          </div>
+        )}
+      </div>
     </div>
   );
 };
