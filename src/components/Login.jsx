@@ -37,12 +37,8 @@ const Login = () => {
         draggable: true,
       });
       setTimeout(() => {
-        if (!response.data.data.accountExists) {
-          navigate("/profile"); // Redirect to profile if no account exists
-        } else {
-          navigate("/"); // Redirect to dashboard otherwise
-        }
-      }, 1000);
+        navigate("/")
+      }, 500);
     } catch (error) {
       toast.error("Login Failed. Please try again.", {
         position: "top-center",

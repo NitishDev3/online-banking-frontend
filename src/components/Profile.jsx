@@ -10,7 +10,9 @@ import { loadAccountData, loadUserData } from "../store/userInfoSlice";
 
 const Profile = () => {
   const profileData = useSelector((store) => store.userInfo.userData);
-  const accountExists = useSelector((store) => store.userInfo.accountData !== null);
+  const accountExists = useSelector(
+    (store) => store.userInfo.accountData !== null
+  );
   const dispatch = useDispatch();
 
   // State to store form data
@@ -59,7 +61,8 @@ const Profile = () => {
       });
     } catch (error) {
       const errorMessage =
-        error.response?.data?.message || "Failed to update profile. Please try again.";
+        error.response?.data?.message ||
+        "Failed to update profile. Please try again.";
       toast.error(errorMessage, {
         position: "top-center",
         autoClose: 3000,
@@ -72,10 +75,13 @@ const Profile = () => {
     // Check if profile is complete (all fields except profilePhotoUrl are mandatory)
     const { firstName, lastName, age, city, gender } = formData;
     if (!firstName || !lastName || !age || !city || !gender) {
-      toast.error("Please complete your profile and create an account. All fields except photo URL are mandatory.", {
-        position: "top-center",
-        autoClose: 5000,
-      });
+      toast.error(
+        "Please complete your profile and create an account. All fields except photo URL are mandatory.",
+        {
+          position: "top-center",
+          autoClose: 5000,
+        }
+      );
       return;
     }
 
@@ -230,7 +236,16 @@ const Profile = () => {
 };
 
 // Reusable InputField Component
-const InputField = ({ label, id, name, type = "text", value, onChange, placeholder = "", required = false }) => (
+const InputField = ({
+  label,
+  id,
+  name,
+  type = "text",
+  value,
+  onChange,
+  placeholder = "",
+  required = false,
+}) => (
   <div className="mb-4">
     <label htmlFor={id} className="block text-gray-700 font-medium mb-2">
       {label}
