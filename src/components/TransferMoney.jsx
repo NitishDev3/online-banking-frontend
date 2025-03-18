@@ -19,7 +19,6 @@ const TransferMoney = () => {
   // Redirect to login if user is not authenticated
   if (!userData) {
     navigate("/login");
-    return null;
   }
 
   const handleChange = (e) => {

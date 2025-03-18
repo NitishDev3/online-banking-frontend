@@ -69,6 +69,16 @@ const Profile = () => {
 
   // Handle account creation
   const handleCreateAccount = async () => {
+    // Check if profile is complete (all fields except profilePhotoUrl are mandatory)
+    const { firstName, lastName, age, city, gender } = formData;
+    if (!firstName || !lastName || !age || !city || !gender) {
+      toast.error("Please complete your profile and create an account. All fields except photo URL are mandatory.", {
+        position: "top-center",
+        autoClose: 5000,
+      });
+      return;
+    }
+
     try {
       const response = await axios.post(
         BASE_API_URL + "/account/create",
